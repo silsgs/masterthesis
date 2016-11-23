@@ -1,0 +1,64 @@
+Primera parte del proyecto, análisis de expresión génica de genes contextualizando en red de interactoma.
+
+3 scripts iniciales, para procesar el fichero input que contiene la información sobre los valores medios de expresión génica y la desviación estándar del cálculo de la media para los genes de A. thaliana.
+
+Formato fichero input (extracto):
+"AT2G39750	9.4757	0.306366
+AT2G39840	9.77905	0.324843
+AT2G39780	11.2766	0.505406
+AT2G23260	5.27322	0.308073
+AT2G23250	5.28765	0.17896
+AT2G23240	5.76361	1.1518
+AT2G23230	5.50634	0.235719
+AT2G23220;AT2G23190	5.31884	0.40731
+AT2G23210	5.38958	0.175796
+AT2G23200	7.65618	0.847626"
+
+Script 1: eliminación del caracter ";", y escritura de los genes posteriores a éste carácter en nuevas líneas con los mismos valores asignados.
+(ej.
+"AT2G23220;AT2G23190	5.31884	0.40731"
+
+será transformado a
+
+"AT2G23220	5.31884	0.40731
+AT2G23190	5.31884	0.40731")
+
+Script 2: eliminación de genes repetidos, calculando la media de los diferentes valores asignados para el mismo gen, para la expresión y la desviación estándar.
+
+Script 3 Degree: construcción del fichero a analizar posteriormente con los datos de interés.
+Del fichero salida del script 2, escribiremos en un nuevo fichero los genes y su valor de expresión que esté presentes en el fichero con los datos del interactoma (genes catalogados en el interactoma con los valores de sus propiedades topológicas), y el valor para la conectividad de éstos genes (degree).
+Se asigna el valor "n/a" para la variable degree para aquellos genes que no están en el interactoma. Estos genes será filtrados posteriormente en el análisis realizado en R.
+
+Extracto fichero output:
+"#id	mean	std	degree
+AT1G01010	7.44237	0.847038	30
+AT1G01030	6.35581	0.441861	n/a
+AT1G01040	8.05484	0.743645	10
+AT1G01050	11.1962	0.470399	5
+AT1G01060	9.84058	1.52348	13
+AT1G01070	7.19251	1.10446	n/a
+AT1G01080	9.40201	1.35695	n/a
+AT1G01090	11.7662	0.624151	2
+AT1G01100	12.607	0.693139	2
+AT1G01110	6.52685	0.588438	n/a
+AT1G01120	10.2215	1.40091	6
+AT1G01130	6.707	0.461287	n/a
+AT1G01140	9.70584	1.8062	23"
+
+Script 3 Average Shortest Path: misma función que el script anterior, pero escogiendo la propiedad tipológica "Average shortest path"
+
+Extracto fichero output:
+"#id	mean	std	AverageShortestPath
+AT1G01010	7.44237	0.847038	4.12111083
+AT1G01030	6.35581	0.441861	n/a
+AT1G01040	8.05484	0.743645	4.25726408
+AT1G01050	11.1962	0.470399	3.43867318
+AT1G01060	9.84058	1.52348	3.99048599
+AT1G01070	7.19251	1.10446	n/a
+AT1G01080	9.40201	1.35695	n/a
+AT1G01090	11.7662	0.624151	4.47402931
+AT1G01100	12.607	0.693139	7.09192594
+AT1G01110	6.52685	0.588438	n/a
+AT1G01120	10.2215	1.40091	4.22666495
+AT1G01130	6.707	0.461287	n/a
+AT1G01140	9.70584	1.8062	3.83684752"
